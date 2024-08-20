@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express()
 const port = 3001;
-app.use(express.json())
 
 const users = [{ 
     name: "Pedro",
@@ -18,10 +17,11 @@ const users = [{
 //Creating method to return all data register 
 
 app.get('/', (req, res) => {
-    res.send("LISTA DE USUARIOS :  " + users.map((i)=>{
-        console.log('Requisiçao feita!') 
-        return i.name
-    }))
+    console.log('Requisiçao feita!') 
+    res.send("LISTA DE USUARIOS :  " +  JSON.stringify(users))
+        
+        
+    
   }
 )
 
@@ -29,14 +29,20 @@ app.get('/', (req, res) => {
 
 // Creating method to return all data from a user
 
-app.get('/:index',(req,res)=>{
-    const {index} = req.params
-    const mensage = "Usuario encontrado : "
-    if(index >= 0 && index <= users.length){
-        res.send( mensage+JSON.stringify(users[index]))
-    }else(
-        res.send('Usuario não encontrado!')
-    )})
+app.get('/:id',(req,res)=>{
+    const {id} = req.params
+    let userFound = false 
+    users.forEach((userData)=>{
+        if(id == userData.id){
+            userFound = true
+            res.status(200).send(userData)
+        }
+    })
+
+    if(userFound == false){
+        res.status(401).send("Usuario não encontrado")
+    }
+ })
 
 
 //Creating method to add new user 
