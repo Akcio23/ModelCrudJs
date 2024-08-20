@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express()
 const port = 3001;
+app.use(express.json())
 
 const users = [{ 
     name: "Pedro",
@@ -20,8 +21,6 @@ app.get('/', (req, res) => {
     console.log('Requisiçao feita!') 
     res.send("LISTA DE USUARIOS :  " +  JSON.stringify(users))
         
-        
-    
   }
 )
 
@@ -79,13 +78,30 @@ app.put('/id/:id',(req,res)=>{
         }
     })
     if(userFound == !true){
-        res.status(400).send('Usuario não econtrado!')
+        res.status(401).send('Usuario não econtrado!')
     }
     if(userFound == true){
         res.status(200).send("Alteração realizada com sucesso!")
     }
  
-   
+})
+
+// Creating method delete data user 
+
+app.delete('/id/:id',(req,res)=>{
+    const {id} = req.params
+    let userFound = false 
+
+    users.map((user)=>{
+        if(user.id == id){
+            userFound = true
+            users.pop(user)
+            res.status(201).send('Usuario excluido!')
+        }
+    })
+    if(userFound == !true){
+        res.status(401).send('Usuaio não encontrado')
+    }
 })
 
 app.listen(port, () => {
