@@ -13,6 +13,10 @@ const users = [{
     id: 2
 }]
 
+
+
+//Creating method to return all data register 
+
 app.get('/', (req, res) => {
     res.send("LISTA DE USUARIOS :  " + users.map((i)=>{
         console.log('Requisiçao feita!') 
@@ -20,6 +24,10 @@ app.get('/', (req, res) => {
     }))
   }
 )
+
+
+
+// Creating method to return all data from a user
 
 app.get('/:index',(req,res)=>{
     const {index} = req.params
@@ -29,6 +37,9 @@ app.get('/:index',(req,res)=>{
     }else(
         res.send('Usuario não encontrado!')
     )})
+
+
+//Creating method to add new user 
 
 app.post('/:addUser',(req,res)=>{
     const {name,age} = req.body
@@ -47,6 +58,29 @@ app.post('/:addUser',(req,res)=>{
    res.status(201).send("Usuario criado com sucesso!")
 })
 
+// Creating method to alteration data user 
+
+app.put('/id/:id',(req,res)=>{
+    const{id} = req.params 
+    let{name, age} = req.body
+    let userFound = false 
+
+    users.forEach((objUser)=>{
+        if(objUser.id == id){
+            objUser.name = name,
+            objUser.age = age
+            userFound = true 
+        }
+    })
+    if(userFound == !true){
+        res.status(400).send('Usuario não econtrado!')
+    }
+    if(userFound == true){
+        res.status(200).send("Alteração realizada com sucesso!")
+    }
+ 
+   
+})
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
